@@ -1,23 +1,25 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[52]:
+# In[155]:
 
 
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup 
+import re
+import numpy as np
 
 
-# In[53]:
+# In[169]:
 
 
-URL='https://baza.drom.ru/company/dokavto74'
+URL='https://baza.drom.ru/company/dokavto74?page=2'
 req = requests.get(URL) # GET-запрос
 soup = BeautifulSoup(req.text, 'lxml')
 
 
-# In[54]:
+# In[170]:
 
 
 title = [] # Список, в котором хранятся названия запчастей
@@ -25,7 +27,7 @@ for row in soup.find_all('div', attrs = {'class':'bull-item-content__subject-con
     title.append(row.text)
 
 
-# In[55]:
+# In[171]:
 
 
 price = [] # Список, в котором хранятся названия запчастей
@@ -33,7 +35,7 @@ for row in soup.find_all('span', attrs = {'class':'price-per-quantity__price'}):
     price.append(row.text)
 
 
-# In[56]:
+# In[172]:
 
 
 manufacture = [] # Список, в котором хранятся названия запчастей
@@ -41,7 +43,7 @@ for row in soup.find_all('div', attrs = {'class':'bull-item__annotation-row manu
     manufacture.append(row.text)
 
 
-# In[57]:
+# In[173]:
 
 
 img = [] # Список, в котором хранятся названия запчастей
@@ -49,61 +51,37 @@ for row in soup.find_all('a', attrs = {'href':'/krasnodar/sell_spare_parts/oblic
     img.append(row.text)
 
 
-# In[58]:
-
-
-img
-
-
-# In[59]:
+# In[174]:
 
 
 feed = pd.DataFrame()
-new = pd.Series(manufacture)
 feed['title'] = title
 feed['price'] = price
-feed['manufacture'] = new
-#feed['manufacture'] = manufacture
-
-
-# In[60]:
-
-
+feed['price'] = feed['price'].str.replace('₽', '')
+feed['manufacture'] = pd.Series(manufacture)
 feed['OEM']= feed['title'].str.split('[').str[1].str.split(']').str[0][:50]
 
 
-# In[61]:
-
-
-feed['price'] = feed['price'].str.replace('₽', '')
-
-
-# In[62]:
+# In[175]:
 
 
 pd.set_option('display.max_colwidth', -1)
 
 
-# In[63]:
+# In[176]:
 
 
 feed['category']= feed['title'].str.split(' ').str[0].str.split('(').str[0][:50]
 
 
-# In[64]:
+# In[177]:
 
 
-import re
+#result = re.findall(r'\b([а-яА-ЯёЁ]+)', feed['title'][11])
+#print(result)
 
 
-# In[65]:
-
-
-result = re.findall(r'\b([а-яА-ЯёЁ]+)', feed['title'][11])
-print(result)
-
-
-# In[66]:
+# In[178]:
 
 
 new = [] # Список, в котором хранятся названия запчастей
@@ -115,62 +93,42 @@ for i in range(len(feed['title'])):
 df12 = pd.DataFrame(data=new, columns=['lemmas', 'data'])
 
 
-# In[67]:
+# In[179]:
 
 
 feed['compatibility'] = df12['lemmas'] + " " + df12['data']
 
 
-# In[68]:
+# In[180]:
 
 
 display(feed)
 
 
-# In[69]:
+# In[181]:
 
 
 feed.to_excel("feed.xlsx")
 
 
-# In[70]:
+# In[182]:
 
 
-result = re.search(r'\b[a-zA-Z]+', feed['title'][1] )
-print(result)
-
-
-# In[71]:
-
-
-result = re.split(r'\A[а-яА-ЯёЁ]+', feed['title'][33], maxsplit=0)
-print(result)
-
-
-# In[72]:
-
-
-k = [] # Список, в котором хранятся названия запчастей
+k = [] # Список, в котором хранятся ссылки на миниатюры фото запчастей
 for row in soup.find_all('img'):
     k.append(row)
 
 
-# In[73]:
+# In[183]:
 
 
 k
 
 
-# In[74]:
+# In[130]:
 
 
-soup.find_all('img')
-
-
-# In[75]:
-
-
-result = re.findall(r'\d{4}–\d{4}', 'Фонарь задний (стоп сигнал) Toyota Mark II (X110) IX 2000–2002  [007B76817]')
+result = re.findall(r'\d{4}–\d{4}', 'Рычаг стояночного тормоза Ford Focus (III) III (2010–2015) [BV612780CE]')
 print(result)
 
 
