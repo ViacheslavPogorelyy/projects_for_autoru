@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[155]:
+# In[217]:
 
 
 import pandas as pd
@@ -9,17 +9,18 @@ import requests
 from bs4 import BeautifulSoup 
 import re
 import numpy as np
+import requests as r
 
 
-# In[169]:
+# In[218]:
 
 
-URL='https://baza.drom.ru/company/dokavto74?page=2'
+URL='https://baza.drom.ru/company/dokavto74/'
 req = requests.get(URL) # GET-запрос
 soup = BeautifulSoup(req.text, 'lxml')
 
 
-# In[170]:
+# In[219]:
 
 
 title = [] # Список, в котором хранятся названия запчастей
@@ -27,7 +28,7 @@ for row in soup.find_all('div', attrs = {'class':'bull-item-content__subject-con
     title.append(row.text)
 
 
-# In[171]:
+# In[220]:
 
 
 price = [] # Список, в котором хранятся названия запчастей
@@ -35,7 +36,7 @@ for row in soup.find_all('span', attrs = {'class':'price-per-quantity__price'}):
     price.append(row.text)
 
 
-# In[172]:
+# In[221]:
 
 
 manufacture = [] # Список, в котором хранятся названия запчастей
@@ -43,45 +44,46 @@ for row in soup.find_all('div', attrs = {'class':'bull-item__annotation-row manu
     manufacture.append(row.text)
 
 
-# In[173]:
-
-
-img = [] # Список, в котором хранятся названия запчастей
-for row in soup.find_all('a', attrs = {'href':'/krasnodar/sell_spare_parts/oblicovka-rychaga-akpp-kia-rio-3-2017-846504y300wk-sedan-1.6-g4fc-123-l-s-g6979842327.html'}):
-    img.append(row.text)
-
-
-# In[174]:
+# In[222]:
 
 
 feed = pd.DataFrame()
+
+
+# In[223]:
+
+
+text = r.get('https://baza.drom.ru/company/dokavto74/').text
+k = re.findall(r'(https://static.baza.drom.ru/v/+\d{13}\D\w{5})', text)
+img = pd.DataFrame(data = k, columns = ['img'])
+img = img.drop_duplicates(subset=['img']).reset_index()
+
+
+# In[224]:
+
+
 feed['title'] = title
 feed['price'] = price
 feed['price'] = feed['price'].str.replace('₽', '')
 feed['manufacture'] = pd.Series(manufacture)
 feed['OEM']= feed['title'].str.split('[').str[1].str.split(']').str[0][:50]
+feed['category']= feed['title'].str.split(' ').str[0].str.split('(').str[0][:50]
+feed['image'] = img['img']
 
 
-# In[175]:
+# In[225]:
 
 
 pd.set_option('display.max_colwidth', -1)
 
 
-# In[176]:
+# In[226]:
 
 
 feed['category']= feed['title'].str.split(' ').str[0].str.split('(').str[0][:50]
 
 
-# In[177]:
-
-
-#result = re.findall(r'\b([а-яА-ЯёЁ]+)', feed['title'][11])
-#print(result)
-
-
-# In[178]:
+# In[227]:
 
 
 new = [] # Список, в котором хранятся названия запчастей
@@ -93,43 +95,22 @@ for i in range(len(feed['title'])):
 df12 = pd.DataFrame(data=new, columns=['lemmas', 'data'])
 
 
-# In[179]:
+# In[228]:
 
 
 feed['compatibility'] = df12['lemmas'] + " " + df12['data']
 
 
-# In[180]:
+# In[229]:
 
 
-display(feed)
+feed
 
 
-# In[181]:
+# In[230]:
 
 
 feed.to_excel("feed.xlsx")
-
-
-# In[182]:
-
-
-k = [] # Список, в котором хранятся ссылки на миниатюры фото запчастей
-for row in soup.find_all('img'):
-    k.append(row)
-
-
-# In[183]:
-
-
-k
-
-
-# In[130]:
-
-
-result = re.findall(r'\d{4}–\d{4}', 'Рычаг стояночного тормоза Ford Focus (III) III (2010–2015) [BV612780CE]')
-print(result)
 
 
 # In[ ]:
