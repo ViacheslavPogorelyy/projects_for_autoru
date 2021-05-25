@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[133]:
+# In[202]:
 
 
 import pandas as pd
@@ -18,22 +18,19 @@ import time
 from prettytable import PrettyTable
 
 
-# In[59]:
+# In[203]:
 
 
 import telebot
 
 
-# In[60]:
+# In[204]:
 
 
 bot = telebot.TeleBot('1884501099:AAGG33pv_ZkikRHYGDHYXMX9qps-qgUIe7o')
-channel_login = '@for_vertis'
-sleep = '10'
-#-1001217016361
 
 
-# In[61]:
+# In[205]:
 
 
 from datetime import datetime
@@ -41,123 +38,77 @@ now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 
 
-# In[62]:
+# In[206]:
 
 
 df = pd.read_csv('https://docs.google.com/spreadsheets/d/1Qqeac9VXzEiB78lRnsQocY0IIibQyfnscqIchX8CMlo/export?format=csv')
 
 
-# In[63]:
+# In[207]:
 
 
 key = df[['Названия строк', 'Сумма по полю Дней с новой ценой']]
 
 
-# In[64]:
+# In[208]:
 
 
 df = key[key['Сумма по полю Дней с новой ценой'] >= 10].reset_index()
 df = df.drop(['index'], axis = 1)
 
 
-# In[149]:
+# In[209]:
 
 
 mytable = PrettyTable()
 
 
-# In[151]:
+# In[210]:
 
 
-mytable.field_names = ["Ссылка на оффер", "Сумма с новой ценой"]
+mytable.field_names = ["Ссылка на оффер", "Дни с  новой ценой"]
 # добавление данных по одной строке за раз
 for i in range(len(df)):
     mytable.add_row([df['Названия строк'][i], df['Сумма по полю Дней с новой ценой'][i]])
 # вывод таблицы в терминал
+
+
+# In[211]:
+
+
+mytable.align["Ссылка на оффер"] = "l"
+mytable.align["Сумма с новой ценой"] = "l"
 print(mytable)
 
 
-# In[152]:
+# In[212]:
 
 
-Row_list =[]
-for i in range((df.shape[0])):
-    Row_list.append(list(df.iloc[i, :]))
+#Row_list =[]
+#for i in range((df.shape[0])):
+    #Row_list.append(list(df.iloc[i, :]))
 
 
-# In[ ]:
+# In[251]:
 
 
-
+bot.send_message(-1001217016361, ggg, disable_web_page_preview = True)
 
 
 # In[128]:
 
 
-for row in Row_list:
-    t = ('{:} {: >12}'.format(row[0], row[1]))
-    bot.send_message(-1001217016361, t, disable_web_page_preview = True)
-    time.sleep(3)
+#for row in Row_list:
+    #t = ('{:} {: >12}'.format(row[0], row[1]))
+    #bot.send_message(-1001217016361, t, disable_web_page_preview = True)
+    #time.sleep(3)
 
 
-# In[99]:
-
-
-for row in Row_list:
-    t = ('{: <13} {: >10} '.format(row[0], row[1]))
-    bot.send_message(-1001217016361, t, disable_web_page_preview = True)
-
-
-# In[153]:
-
-
-bot.send_message(-1001217016361, mytable, disable_web_page_preview = True)
-
-
-# In[9]:
-
-
-@bot.message_handler(content_types=['text'])
-def get_text_messages(message):
-    if message.text == "Привет":
-        bot.send_message(message.from_user.id, "Привет, сейчас я расскажу тебе гороскоп на сегодня.")
-    elif message.text == "/help":
-        bot.send_message(message.from_user.id, "Напиши Привет")
-    else:
-        bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
-
-
-# In[95]:
+# In[199]:
 
 
 bot.remove_webhook()
 
-
-# In[54]:
-
-
-#!pip install schedule
-
-
-# if current_time=='18:19:00':
-#     def test_send_message():
-#             ret_msg = bot.send_message(-1001217016361, 'Оно работает')
-#             assert ret_msg.message_id
-
-# import schedule
-# import time
-# 
-# #def job():
-#     #print("I'm working...")
-# def send_message():
-#     bot.send_message(370921204, 'Hello')
-# 
-# schedule.every().day.at("17:50").do(send_message)
-# 
-# 
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)
 
 # In[114]:
 
@@ -165,36 +116,38 @@ bot.remove_webhook()
 bot.polling(none_stop=True, interval=0)
 
 
-# In[129]:
+# In[306]:
 
 
-data = [
-    ['https://realty.yandex.ru/offer/1099801596477075200/',  5],
-    ['https://realty.yandex.ru/offer/1333946987119880192/',  8],
-    ['https://realty.yandex.ru/offer/1478742844538331904/',  3]]
+ggg = PrettyTable(header = True, border = False, min_table_width = 80,padding_width = 0,right_padding_width = 0)
 
 
-print('|Ссылка на оффер                                    |Сумма Дней с новой ценой|')
-print('-----------------------------------------------------------------------------')
-for row in Row_list:
-    print('|{: <16}| {: >12.2f}           |'.format(row[0], row[1]))
+# In[307]:
 
 
-# In[143]:
-
-
-mytable = PrettyTable()
-
-
-# In[144]:
-
-
-mytable.field_names = ["Ссылка на оффер", "Сумма Дней с новой ценой"]
+ggg.field_names = ["Ссылка на оффер", "Дни с  новой ценой"]
 # добавление данных по одной строке за раз
 for i in range(len(df)):
-    mytable.add_row([df['Названия строк'][i], df['Сумма по полю Дней с новой ценой'][i]])
-# вывод таблицы в терминал
-print(mytable)
+    ggg.add_row([df['Названия строк'][i], df['Сумма по полю Дней с новой ценой'][i]])
+
+
+# In[308]:
+
+
+ggg.align["Ссылка на оффер"] = "l"
+ggg.align["Сумма с новой ценой"] = "r"
+
+
+# In[340]:
+
+
+bot.send_message(-1001217016361, text="`ggg`", disable_web_page_preview = True, parse_mode= 'Markdown')
+
+
+# In[341]:
+
+
+print(ggg)
 
 
 # In[ ]:
