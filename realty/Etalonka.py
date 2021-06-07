@@ -17,7 +17,7 @@ urllib3.disable_warnings()
 # In[173]:
 
 
-URL='https://www.avito.ru/shops/rostov-na-donu/zapchasti_i_aksessuary'
+URL='secret'
 req = requests.get(URL) # GET-запрос
 soup = BeautifulSoup(req.text, 'lxml')
 
@@ -115,7 +115,7 @@ etalon
 # In[189]:
 
 
-etalon.to_excel("parts_etalons.xlsx")
+etalon.to_excel("etalons.xlsx")
 
 
 # In[ ]:
