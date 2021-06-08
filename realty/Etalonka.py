@@ -34,20 +34,6 @@ last = num[0].replace('p=', '')
 last = int(last)
 
 
-# In[176]:
-
-
-city = URL.replace('https://www.avito.ru/shops/', '')
-city = re.findall(r'(\S+\W+)', city)
-city = city[0].replace('/', '')
-
-
-# In[177]:
-
-
-full_link = city+'?page_from=from_shops_list'
-
-
 # In[178]:
 
 
