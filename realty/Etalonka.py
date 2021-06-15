@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[65]:
+# In[1]:
 
 
 import pandas as pd
@@ -14,15 +14,17 @@ import urllib3
 urllib3.disable_warnings()
 
 
-# In[173]:
+# In[2]:
 
 
-URL='secret'
+URL='https://www.avito.ru/shops/rostov-na-donu/nedvizhimost'
 req = requests.get(URL) # GET-запрос
 soup = BeautifulSoup(req.text, 'lxml')
 
 
-# In[175]:
+# Получаем все ссылки на странице и количество страниц с предложениями
+
+# In[3]:
 
 
 for link in soup.find_all('a'):
@@ -34,7 +36,9 @@ last = num[0].replace('p=', '')
 last = int(last)
 
 
-# In[178]:
+# Создаем цикл, где отдельно достаем наименованеи магазина, количество офферов и ссылки на магазин.
+
+# In[4]:
 
 
 for_title = []
@@ -58,29 +62,37 @@ for i in range(1, last+1):
         for_count.append(row_1.text)
 
 
-# In[179]:
+# Избавляемся от дублей ссылок
+
+# In[32]:
 
 
 result = pd.DataFrame(data = for_result, columns = ['link'])
-result = result.drop_duplicates(subset=['link']).reset_index()
+unique_link = result.drop_duplicates(subset=['link']).reset_index()
 
 
-# In[180]:
+# Получаем послные кликабельные ссылки на магазин
+
+# In[33]:
+
+
+links = []
+for i in unique_link['link']:
+    id_avito = "https://www.avito.ru{}".format(i)
+    links.append(id_avito)
+
+
+# Создаем датафрейм, в котором у нас будут формироваться искомые данные
+
+# In[34]:
 
 
 etalon = pd.DataFrame()
 
 
-# In[185]:
+# Форматируем столбцы Датафрейма с конечным результатом 
 
-
-links = []
-for i in result['link']:
-    id_avito = "https://www.avito.ru{}".format(i)
-    links.append(id_avito)
-
-
-# In[186]:
+# In[35]:
 
 
 etalon['title'] = for_title
@@ -92,20 +104,14 @@ etalon['count'] = etalon['count'].str.replace('\n', '')
 etalon['links'] = links
 
 
-# In[187]:
+# In[36]:
 
 
 etalon
 
 
-# In[189]:
+# In[37]:
 
 
-etalon.to_excel("etalons.xlsx")
-
-
-# In[ ]:
-
-
-
+etalon.to_excel("parts_etalons.xlsx")
 
