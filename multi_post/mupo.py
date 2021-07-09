@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[50]:
+# In[124]:
 
 
 import os, os.path
@@ -14,13 +14,13 @@ import numpy as np
 import xml.etree.ElementTree as ET
 
 
-# In[51]:
+# In[125]:
 
 
 now = datetime.datetime.now()
 
 
-# In[52]:
+# In[126]:
 
 
 day = str(now.day)
@@ -32,31 +32,31 @@ second = str(now.second)
 microsecond = str(now.microsecond)
 
 
-# In[53]:
+# In[127]:
 
 
 csv_n = 'https://docs.google.com/spreadsheets/d/1FLgQtch4aZWjdVnRYh_ts9DReIS0gp2LvUyzt7E8XXk/export?format=csv'
 
 
-# In[54]:
+# In[128]:
 
 
 df = pd.read_csv(csv_n)
 
 
-# In[55]:
+# In[129]:
 
 
 df 
 
 
-# In[56]:
+# In[130]:
 
 
 #auto_ru = '<?xml version="1.0" encoding="utf-8"?>'
 
 
-# In[57]:
+# In[131]:
 
 
 parts = ET.Element('parts')
@@ -75,9 +75,35 @@ availability = ET.SubElement(part, 'availability')
 isAvailable = ET.SubElement(availability, 'isAvailable')
 images = ET.SubElement(part, 'images')
 image = ET.SubElement(images, 'image')
+compatibility = ET.SubElement(part, 'compatibility')
+car = ET.SubElement(compatibility, 'compatibility')
 
 
-# In[58]:
+# In[132]:
+
+
+title.text = df['title'][1]
+description.text = df['description'][1]
+price.text = df['description'][1]
+
+
+# In[133]:
+
+
+for i in range(len(df['id'])):
+    title.text = df['title'][i]
+    description.text = df['description'][i]
+    price.text = df['price'][i]
+    isAvailable.text = 'True'
+    image.text = df['images'][i]
+    is_new = df['is_new'][i]
+    car.text = df['compatibility'][7]
+    part_number.text = 'de44s25'
+    store.text = '333981411'
+    offer_url.text = 'http://sklad-fotki.ru/files/part23343'
+
+
+# In[134]:
 
 
 tree = ET.ElementTree(parts)
