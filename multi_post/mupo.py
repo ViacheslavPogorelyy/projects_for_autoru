@@ -79,14 +79,6 @@ compatibility = ET.SubElement(part, 'compatibility')
 car = ET.SubElement(compatibility, 'compatibility')
 
 
-# In[132]:
-
-
-title.text = df['title'][1]
-description.text = df['description'][1]
-price.text = df['description'][1]
-
-
 # In[133]:
 
 
