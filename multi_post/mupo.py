@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[36]:
+# In[29]:
 
 
 import os, os.path
@@ -14,13 +14,13 @@ import numpy as np
 import xml.etree.ElementTree as ET
 
 
-# In[37]:
+# In[30]:
 
 
 now = datetime.datetime.now()
 
 
-# In[38]:
+# In[31]:
 
 
 day = str(now.day)
@@ -32,25 +32,19 @@ second = str(now.second)
 microsecond = str(now.microsecond)
 
 
-# In[39]:
+# In[32]:
 
 
 csv_n = 'https://docs.google.com/spreadsheets/d/1FLgQtch4aZWjdVnRYh_ts9DReIS0gp2LvUyzt7E8XXk/export?format=csv'
 
 
-# In[40]:
+# In[33]:
 
 
 df = pd.read_csv(csv_n)
 
 
-# In[41]:
-
-
-#auto_ru = '<?xml version="1.0" encoding="utf-8"?>'
-
-
-# In[42]:
+# In[35]:
 
 
 parts = ET.Element('parts')
@@ -73,7 +67,7 @@ compatibility = ET.SubElement(part, 'compatibility')
 car = ET.SubElement(compatibility, 'compatibility')
 
 
-# In[49]:
+# In[43]:
 
 
 for i in range(len(df['id'])):
@@ -89,12 +83,29 @@ for i in range(len(df['id'])):
     offer_url.text = df['url'][i]
 
 
-# In[50]:
+# In[42]:
 
 
 tree = ET.ElementTree(parts)
-mydata = ET.tostring(parts, encoding="utf-8", method="xml")
-tree.write("sample.xml")
+#mydata = ET.tostring(parts, encoding="utf-8", method="xml")
+tree.write("sample.xml", encoding='utf8')
+
+
+# In[63]:
+
+
+#def func(row):
+    #xml = ['<part>']
+    #for field in row.index:
+        #xml.append('  <{0}>{1}</field>'.format(field, row[field]))
+    #xml.append('</parts>')
+    #return '\n'.join(xml)
+
+
+# In[64]:
+
+
+#t = '\n'.join(df.apply(func, axis=1))
 
 
 # In[ ]:
