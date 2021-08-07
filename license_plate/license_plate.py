@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[378]:
+# In[1]:
 
 
 from PIL import Image, ImageChops
@@ -12,31 +12,31 @@ import imagehash
 import time
 
 
-# In[412]:
+# In[2]:
 
 
-offer = 'http://05.img.avito.st/640x480/11336196705.jpg'
+offer = 'https://86.img.avito.st/640x480/11600735986.jpg'
 
 
-# In[413]:
+# In[3]:
 
 
 offer_id = re.findall(r'\d{11}', offer)
 
 
-# In[414]:
+# In[4]:
 
 
 for element in offer_id:
     offer_id = int(element)
 
 
-# In[415]:
+# In[5]:
 
 
 links = []
 
-for i in range(0, 300):
+for i in range(0, 1800):
     offer_id -= 1
     last_num = str(offer_id)[-2:]
     short_link = 'https://{}.img.avito.st/'.format(last_num)
@@ -44,59 +44,65 @@ for i in range(0, 300):
     links.append(all_link)
 
 
-# In[416]:
+# In[6]:
 
 
 response = requests.get(offer)
 original = Image.open(BytesIO(response.content))
 
 
-# In[417]:
+# In[7]:
 
 
 original
 
 
-# In[418]:
+# In[8]:
 
 
-original_crop = original.crop((0, 0, 150, 150))
+original_crop = original.crop((0, 0, 180, 180))
 
 
-# In[419]:
+# In[9]:
 
 
 original_crop
 
 
-# In[420]:
+# In[10]:
 
 
-response2 = requests.get('https://05.img.avito.st/640x480/11335020005.jpg')
+response2 = requests.get('http://00.img.avito.st/640x480/11335020100.jpg')
 test_image = Image.open(BytesIO(response2.content))
 
 
-# In[421]:
+# In[11]:
 
 
-test_image_crop = test_image.crop((0, 0, 150, 150))
+test_image_crop = test_image.crop((0, 0, 180, 180))
 
 
-# In[422]:
+# In[12]:
 
 
 test_image_crop
 
 
-# In[423]:
+# In[13]:
 
 
-hash_original = imagehash.average_hash(original_crop)
-hash_test = imagehash.average_hash(test_image_crop)
+hash_original = imagehash.average_hash(original_crop, hash_size=8)
+hash_test = imagehash.average_hash(test_image_crop, hash_size=8)
 print(hash_original - hash_test)
 
 
-# In[424]:
+# In[14]:
+
+
+print(hash_original)
+
+
+# In[15]:
 
 
 key = ()
@@ -104,17 +110,24 @@ for i in links:
     try:
         response3 = requests.get(i)
         test2 = Image.open(BytesIO(response3.content))
-        test_image_crop2 = test2.crop((0, 0, 150, 150))
-        hash_test2 = imagehash.average_hash(test_image_crop2)
+        test_image_crop2 = test2.crop((0, 0, 180, 180))
+        hash_test2 = imagehash.average_hash(test_image_crop2, hash_size=8)
         different = hash_original - hash_test2
-        if different < 1:
+        if different <= 1:
             print('Ссылка с номером:', i)
             break
         else:
             е = 1
+            #print(different, i)
     except:
         pass
     #time.sleep(1)
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
