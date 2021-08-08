@@ -12,6 +12,8 @@ import imagehash
 import time
 
 
+# Передаем ссылку на изображение с заглушкой номерного знака сюда руками.
+
 # In[2]:
 
 
@@ -61,67 +63,26 @@ original
 
 
 original_crop = original.crop((0, 0, 180, 180))
+hash_original = imagehash.average_hash(original_crop, hash_size=8)
 
 
 # In[9]:
 
 
-original_crop
-
-
-# In[10]:
-
-
-response2 = requests.get('http://00.img.avito.st/640x480/11335020100.jpg')
-test_image = Image.open(BytesIO(response2.content))
-
-
-# In[11]:
-
-
-test_image_crop = test_image.crop((0, 0, 180, 180))
-
-
-# In[12]:
-
-
-test_image_crop
-
-
-# In[13]:
-
-
-hash_original = imagehash.average_hash(original_crop, hash_size=8)
-hash_test = imagehash.average_hash(test_image_crop, hash_size=8)
-print(hash_original - hash_test)
-
-
-# In[14]:
-
-
-print(hash_original)
-
-
-# In[15]:
-
-
-key = ()
 for i in links:
     try:
-        response3 = requests.get(i)
-        test2 = Image.open(BytesIO(response3.content))
-        test_image_crop2 = test2.crop((0, 0, 180, 180))
-        hash_test2 = imagehash.average_hash(test_image_crop2, hash_size=8)
-        different = hash_original - hash_test2
+        response_offer = requests.get(i)
+        image = Image.open(BytesIO(response_offer.content))
+        test_image_crop = image.crop((0, 0, 180, 180))
+        hash_image = imagehash.average_hash(test_image_crop, hash_size=8)
+        different = hash_original - hash_image
         if different <= 1:
             print('Ссылка с номером:', i)
             break
         else:
-            е = 1
-            #print(different, i)
+            pass
     except:
         pass
-    #time.sleep(1)
 
 
 # In[ ]:
