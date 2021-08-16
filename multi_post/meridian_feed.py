@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[36]:
+# In[20]:
 
 
 import xml.etree.ElementTree as ET
@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 
-# In[37]:
+# In[140]:
 
 
 URL='http://baz-on.ru/export/c391/6d1e4/autoru-piter.xml'
@@ -21,7 +21,7 @@ req = requests.get(URL) # GET-запрос
 soup = BeautifulSoup(req.text, 'lxml')
 
 
-# In[109]:
+# In[141]:
 
 
 image = []
@@ -30,7 +30,7 @@ for row in soup.find_all('images'):
         image.append(row1)
 
 
-# In[116]:
+# In[142]:
 
 
 df = pd.DataFrame(image, columns = ['link'])
@@ -39,50 +39,71 @@ dublicate = dublicate[dublicate > 1].reset_index()
 bad_link = dublicate['index'].tolist()
 
 
-# In[147]:
+# In[143]:
 
 
-new = []
-for row in soup.find_all('images'):
-    new.append(row)
+bad_link[48]
 
 
 # In[153]:
 
 
-len(new)
+new = []
+for row in soup.find_all('images'):
+        new.append(row)
+    
 
 
 # In[155]:
 
 
-for i in range(20199):
-    print(new[0])
+soup
 
 
-# In[39]:
+# In[156]:
 
 
-image = pd.Series(image)
-drop_dublicated = image.drop_duplicates(False)
+title = []
+for row in soup.find_all('title'):
+    title.append(row)    
 
 
-# In[40]:
+# In[164]:
 
 
-drop_dublicated
+part = []
+for row in soup.find_all('part'):
+    part.append(row) 
 
 
-# In[41]:
+# In[174]:
 
 
-image
+data = pd.DataFrame(columns = ['title'])
 
 
-# In[6]:
+# In[178]:
 
 
-image
+title = []
+for i in range(len(part)):
+    for row in part[i].find_all('title'):
+        title.append(row)
+
+
+# In[179]:
+
+
+part_number = []
+for i in range(len(part)):
+    for row in part[i].find_all('part_number'):
+        part_number.append(row)
+
+
+# In[181]:
+
+
+len(part_number)
 
 
 # In[ ]:
