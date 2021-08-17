@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[20]:
+# In[18]:
 
 
 import xml.etree.ElementTree as ET
@@ -11,99 +11,86 @@ import requests as r
 import requests 
 from bs4 import BeautifulSoup
 import pandas as pd
+from lxml import objectify
 
 
-# In[140]:
+# In[19]:
 
 
 URL='http://baz-on.ru/export/c391/6d1e4/autoru-piter.xml'
-req = requests.get(URL) # GET-запрос
-soup = BeautifulSoup(req.text, 'lxml')
 
 
-# In[141]:
+# In[20]:
 
 
-image = []
-for row in soup.find_all('images'):
-    for row1 in row.find_all('image'):
-        image.append(row1)
+from lxml import objectify
+xml = objectify.parse(URL)
+root = xml.getroot()
 
 
-# In[142]:
+# In[137]:
 
 
-df = pd.DataFrame(image, columns = ['link'])
-dublicate = df['link'].value_counts()
-dublicate = dublicate[dublicate > 1].reset_index()
-bad_link = dublicate['index'].tolist()
+print(root.getchildren()[1].getchildren()[7].getchildren())
+print(root.getchildren()[1].getchildren()[9].getchildren())
+print(root.getchildren()[1].getchildren()[10].getchildren())
 
 
-# In[143]:
+# data1=[]
+# for i in range(len(root.getchildren())):
+#     idd = root.getchildren()[i].getchildren()[0]
+#     title = root.getchildren()[i].getchildren()[1]
+#     oem = root.getchildren()[i].getchildren()[2]
+#     manu = root.getchildren()[i].getchildren()[3]
+#     des = root.getchildren()[i].getchildren()[4]
+#     is_new = root.getchildren()[i].getchildren()[5]
+#     price = root.getchildren()[i].getchildren()[6]
+#     avia = root.getchildren()[i].getchildren()[7].getchildren()
+#     url = root.getchildren()[i].getchildren()[8]
+#     prop = root.getchildren()[i].getchildren()[9].getchildren()
+#     images = root.getchildren()[i].getchildren()[10].getchildren()
+#     comp = root.getchildren()[i].getchildren()[11].getchildren())
+
+# In[103]:
 
 
-bad_link[48]
-
-
-# In[153]:
-
-
-new = []
-for row in soup.find_all('images'):
-        new.append(row)
+avia = []
+prop = []
+images = []
+comp = []
+for i in range(len(root.getchildren())):
+    try:
+        av = root.getchildren()[i].getchildren()[7].getchildren()
+        pr = root.getchildren()[i].getchildren()[9].getchildren()
+        im = root.getchildren()[i].getchildren()[10].getchildren()
+        com = root.getchildren()[i].getchildren()[11].getchildren()
+    except:
+        com = None
+    avia.append([av])
+    prop.append([pr])
+    images.append([im])
+    comp.append([com])
     
 
 
-# In[155]:
+# In[108]:
 
 
-soup
+len(comp)
 
 
-# In[156]:
+# In[85]:
 
 
-title = []
-for row in soup.find_all('title'):
-    title.append(row)    
+data=[]
+for i in range(len(root.getchildren())):
+    data.append([child.text for child in root.getchildren()[i].getchildren()])
 
 
-# In[164]:
+# In[86]:
 
 
-part = []
-for row in soup.find_all('part'):
-    part.append(row) 
-
-
-# In[174]:
-
-
-data = pd.DataFrame(columns = ['title'])
-
-
-# In[178]:
-
-
-title = []
-for i in range(len(part)):
-    for row in part[i].find_all('title'):
-        title.append(row)
-
-
-# In[179]:
-
-
-part_number = []
-for i in range(len(part)):
-    for row in part[i].find_all('part_number'):
-        part_number.append(row)
-
-
-# In[181]:
-
-
-len(part_number)
+data
 
 
 # In[ ]:
