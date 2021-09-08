@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[51]:
+# In[15]:
 
 
 import os, os.path
@@ -12,40 +12,21 @@ import datetime
 import pandas as pd 
 import numpy as np
 import xml.etree.ElementTree as ET
-from xml.dom import minidom
 
 
-# In[52]:
-
-
-now = datetime.datetime.now()
-
-
-# In[53]:
-
-
-day = str(now.day)
-month = str(now.month)
-year = str(now.year)
-hour = str(now.hour)
-minute = str(now.minute)
-second = str(now.second)
-microsecond = str(now.microsecond)
-
-
-# In[54]:
+# In[16]:
 
 
 csv_n = 'https://docs.google.com/spreadsheets/d/1FLgQtch4aZWjdVnRYh_ts9DReIS0gp2LvUyzt7E8XXk/export?format=csv'
 
 
-# In[55]:
+# In[17]:
 
 
 df = pd.read_csv(csv_n)
 
 
-# In[58]:
+# In[18]:
 
 
 parts = ET.Element('parts')
@@ -75,20 +56,14 @@ for i in range(len(df['id'])):
     image = ET.SubElement(images, 'image')
     image.text = df['images'][i]
     compatibility = ET.SubElement(part, 'compatibility')
-    compatibility.text = df['compatibility'][i]
+    car = ET.SubElement(compatibility, 'car')
+    car.text = df['compatibility'][i]
     tree = ET.ElementTree(parts)
-    
 
 
-# In[59]:
+# In[19]:
 
 
 tree = ET.ElementTree(parts)
 tree.write("sample.xml", encoding='utf8')
-
-
-# In[ ]:
-
-
-
 
