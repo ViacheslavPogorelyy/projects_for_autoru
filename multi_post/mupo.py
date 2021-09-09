@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[15]:
+# In[1]:
 
 
 import os, os.path
@@ -14,19 +14,27 @@ import numpy as np
 import xml.etree.ElementTree as ET
 
 
-# In[16]:
+# In[2]:
 
 
 csv_n = 'https://docs.google.com/spreadsheets/d/1FLgQtch4aZWjdVnRYh_ts9DReIS0gp2LvUyzt7E8XXk/export?format=csv'
 
 
-# In[17]:
+# In[3]:
 
 
 df = pd.read_csv(csv_n)
+df
 
 
-# In[18]:
+# In[4]:
+
+
+df['compatibility'] = df['compatibility'].str.split(';')
+df['images'] = df['images'].str.split(';')
+
+
+# In[5]:
 
 
 parts = ET.Element('parts')
@@ -53,15 +61,17 @@ for i in range(len(df['id'])):
     isAvailable = ET.SubElement(availability, 'isAvailable')
     isAvailable.text = df['is_available'][i]
     images = ET.SubElement(part, 'images')
-    image = ET.SubElement(images, 'image')
-    image.text = df['images'][i]
+    for y in range(len(df['images'][i])):
+        image = ET.SubElement(images, 'image')
+        image.text = df['images'][i][y]
     compatibility = ET.SubElement(part, 'compatibility')
-    car = ET.SubElement(compatibility, 'car')
-    car.text = df['compatibility'][i]
+    for num in range(len(df['compatibility'][i])):
+        car = ET.SubElement(compatibility, 'car')
+        car.text = df['compatibility'][i][num]
     tree = ET.ElementTree(parts)
 
 
-# In[19]:
+# In[6]:
 
 
 tree = ET.ElementTree(parts)
