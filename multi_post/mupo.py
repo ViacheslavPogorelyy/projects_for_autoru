@@ -30,8 +30,8 @@ df
 # In[4]:
 
 
-df['compatibility'] = df['compatibility'].str.split(';')
-df['images'] = df['images'].str.split(';')
+df['compatibility'] = df['compatibility'].str.split('; ')
+df['images'] = df['images'].str.split('; ')
 
 
 # In[5]:
