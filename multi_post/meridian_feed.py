@@ -64,22 +64,147 @@ for i in range(len(bad_link)):
 bad_link
 
 
-# In[8]:
+# In[12]:
 
 
-#ttt = []
-#for i in range(len(root.getchildren())):
-    #g = root.getchildren()[i].getchildren()
-    #new = []
-    #ttt.append(new)
-    #for y in range(len(g)):
-        #if g[y].tag == 'availability' or g[y].tag == 'properties' or g[y].tag == 'images' or g[y].tag == 'compatibility':
-            #new.append(g[y].getchildren())
-        #else:
-            #new.append(g[y])
+feed = pd.DataFrame()
+
+
+# part
+# id
+# title
+# part_number
+# manufacturer
+# description
+# is_new
+# price
+# availability
+# isAvailable
+# offer_url
+# properties
+# property
+# images
+# image
+# image
+# image
+# image
+# compatibility
+# car
+
+# In[20]:
+
+
+feed['part'] = []
+feed['id'] = []
+feed['title'] = []
+feed['part_number'] = []
+feed['manufacturer'] = []
+feed['description'] = []
+feed['is_new'] = []
+feed['price'] = []
+feed['availability'] = []
+feed['offer_url'] = []
+feed['properties'] = []
+feed['images'] = []
+feed['compatibility'] = []
+for i in range(len(root.getchildren())):
+    g = root.getchildren()[i].getchildren()
+    part = []
+    idd = []
+    title = []
+    part_number = []
+    manufacturer = []
+    description = []
+    is_new = []
+    price = []
+    availability = []
+    offer_url = []
+    properties = []
+    images = []
+    compatibility = []
+    feed['part'].append(part)
+    feed['id'].append(idd)
+    feed['title'].append(title)
+    feed['part_number'].append(part_number)
+    feed['manufacturer'].append(manufacturer)
+    feed['description'].append(description)
+    feed['is_new'].append(is_new)
+    feed['price'].append(price)
+    feed['availability'].append(availability)
+    feed['offer_url'].append(offer_url)
+    feed['properties'].append(properties)
+    feed['images'].append(images)
+    feed['compatibility'].append(compatibility)
+    for y in range(len(g)):
+        if g[y].tag == 'part':
+            part.append(g[y])
+            break
+        if g[y].tag == 'id':
+            idd.append(g[y])
+            break
+        if g[y].tag == 'title':
+            title.append(g[y])
+            break
+        if g[y].tag == 'part_number':
+            part_number.append(g[y])
+            break
+        if g[y].tag == 'manufacturer':
+            manufacturer.append(g[y])
+            break
+        if g[y].tag == 'description':
+            description.append(g[y])
+            break
+        if g[y].tag == 'is_new':
+            is_new.append(g[y])
+            break
+        if g[y].tag == 'price':
+            price.append(g[y])
+            break
+        if g[y].tag == 'availability':
+            availability.append(g[y].getchildren())
+            break
+        if g[y].tag == 'offer_url':
+            offer_url.append(g[y])
+            break
+        if g[y].tag == 'properties':
+            properties.append(g[y])
+            break
+        if g[y].tag == 'images':
+            images.append(g[y].getchildren())
+            break
+        if g[y].tag == 'compatibility':
+            compatibility.append(g[y].getchildren())
+            break
+
+
+# In[25]:
+
+
+feed = pd.DataFrame()
 
 
 # In[10]:
+
+
+ttt = []
+for i in range(len(root.getchildren())):
+    g = root.getchildren()[i].getchildren()
+    new = []
+    ttt.append(new)
+    for y in range(len(g)):
+        if g[y].tag == 'availability' or g[y].tag == 'properties' or g[y].tag == 'images' or g[y].tag == 'compatibility':
+            new.append(g[y].getchildren())
+        else:
+            new.append(g[y])
+
+
+# In[11]:
+
+
+ttt
+
+
+# In[9]:
 
 
 ttt1 = []
