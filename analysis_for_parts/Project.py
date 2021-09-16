@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[65]:
 
 
 import pandas as pd
@@ -12,7 +12,7 @@ import datetime
 
 # ## Знакомство с данными
 
-# In[2]:
+# In[66]:
 
 
 shop_1 = pd.read_excel('11124040_clicks.xlsx')
@@ -23,7 +23,7 @@ shop_5 = pd.read_excel('55553302_clicks.xlsx')
 shop_6 = pd.read_excel('8335728_clicks.xlsx')
 
 
-# In[3]:
+# In[67]:
 
 
 calls_1 = pd.read_excel('Calls_11124040.xlsx')
@@ -34,37 +34,37 @@ calls_5 = pd.read_excel('Calls_55553302.xlsx')
 calls_6 = pd.read_excel('Calls_8335728.xlsx')
 
 
-# In[4]:
+# In[68]:
 
 
 shop_1.info()
 
 
-# In[5]:
+# In[69]:
 
 
 shop_2.info()
 
 
-# In[6]:
+# In[70]:
 
 
 shop_3.info()
 
 
-# In[7]:
+# In[71]:
 
 
 shop_4.info()
 
 
-# In[8]:
+# In[72]:
 
 
 shop_5.info()
 
 
-# In[9]:
+# In[73]:
 
 
 shop_6.info()
@@ -77,7 +77,7 @@ shop_6.info()
 
 # Поскольку пропусков в данных у нас нет, судя по предыдущему пункту, то сразу можем приступить к переводу колонки `time` к необходимому формату + переименуем столбцы для удобства.
 
-# In[10]:
+# In[74]:
 
 
 for i in [shop_1, shop_2, shop_3, shop_4, shop_5, shop_6]:
@@ -87,10 +87,30 @@ for i in [shop_1, shop_2, shop_3, shop_4, shop_5, shop_6]:
 
 # Тоже самое можно сделать с данными по звонкам.
 
-# In[11]:
+# In[75]:
 
 
 for i in [calls_1, calls_2, calls_3, calls_4, calls_5, calls_6]:
     i.columns = ['call_time', 'result', 'talk_second', 'source', 'proxy','target']
     i['call_time'] = pd.to_datetime(i['call_time'])
+
+
+# ### Вывод:
+# Мы подготовили данные и теперь можно приступать к анализу.
+
+# ## Исследовательский анализ данных
+
+# Поскольку кликов может быть много в короткий промежуток времени, то для удобства сделаем получасовые когорты для постраения графиков. 
+
+# In[78]:
+
+
+for i in [shop_1, shop_2, shop_3, shop_4, shop_5, shop_6]:
+    i['hour'] = i['time'].dt.round('30min')
+
+
+# In[80]:
+
+
+shop_3
 
