@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[401]:
+# In[1]:
 
 
 import pandas as pd
@@ -11,7 +11,7 @@ import datetime
 import time
 
 
-# In[402]:
+# In[2]:
 
 
 shop_1 = pd.read_excel('11124040_clicks.xlsx')
@@ -22,7 +22,7 @@ shop_5 = pd.read_excel('55553302_clicks.xlsx')
 shop_6 = pd.read_excel('8335728_clicks.xlsx')
 
 
-# In[403]:
+# In[3]:
 
 
 calls_1 = pd.read_excel('Calls_11124040.xlsx')
@@ -33,37 +33,37 @@ calls_5 = pd.read_excel('Calls_55553302.xlsx')
 calls_6 = pd.read_excel('Calls_8335728.xlsx')
 
 
-# In[404]:
+# In[4]:
 
 
 shop_1.info()
 
 
-# In[405]:
+# In[5]:
 
 
 shop_2.info()
 
 
-# In[406]:
+# In[6]:
 
 
 shop_3.info()
 
 
-# In[407]:
+# In[7]:
 
 
 shop_4.info()
 
 
-# In[408]:
+# In[8]:
 
 
 shop_5.info()
 
 
-# In[409]:
+# In[9]:
 
 
 shop_6.info()
@@ -76,7 +76,7 @@ shop_6.info()
 # 
 # Поскольку пропусков в данных у нас нет, судя по предыдущему пункту, то сразу объединить таблицы для дальнейшейно удобства. Плюс зададим каждой таблице ID.
 
-# In[410]:
+# In[10]:
 
 
 col = 1
@@ -86,20 +86,20 @@ for i in [shop_1, shop_2, shop_3, shop_4, shop_5, shop_6]:
         
 shops = pd.concat([shop_1, shop_2, shop_3, shop_4, shop_5, shop_6],axis = 0)
 
-shops
+
+# Удалим столбец с персональными данными и сразу для удобства переименуем оставшиеся.
+
+# In[11]:
 
 
-# Переименуем столбцы для удоства.
+shops = shops.drop(['Ссылка на объявление'], axis= True)
 
-# In[411]:
-
-
-shops.columns = ['time', 'category', 'link', 'price', 'count', 'id']
+shops.columns = ['time', 'category', 'price', 'count', 'id']
 
 
-# Тоже самое можно сделать с данными по звонкам.
+# Теперь переведем дату в соответствующий формат.
 
-# In[412]:
+# In[12]:
 
 
 shops['time'] =pd.to_datetime(shops['time'], format='%d.%m.%Y %H:%M:%S', dayfirst=False)
@@ -109,7 +109,7 @@ shops
 
 # Теперь тоже самое можно сделать и с другой таблицей по звонкам.
 
-# In[413]:
+# In[13]:
 
 
 col = 1
@@ -120,25 +120,23 @@ for i in [calls_1, calls_2, calls_3, calls_4, calls_5, calls_6]:
 calls = pd.concat([calls_1, calls_2, calls_3, calls_4, calls_5, calls_6],axis = 0)
 
 
-# Чтобы не показывать персональные данные, удалим лишние столбцы.
+# Вновь удалим лишние столбцы с персональными данными.
 
-# In[414]:
+# In[14]:
 
 
 calls = calls.drop(['source', 'proxy', 'target'], axis= True)
 calls.columns = ['time', 'result', 'talk_time', 'id']
 
-calls
 
-
-# In[426]:
+# In[15]:
 
 
 calls['time'] =pd.to_datetime(calls['time'], format='%Y-%m-%dT%H:%M:%S', dayfirst=False)
 #calls['time'].dt.round('30min')
 
 
-# In[427]:
+# In[16]:
 
 
 calls
@@ -151,20 +149,20 @@ calls
 # 
 # Поскольку кликов может быть много в короткий промежуток времени, то для удобства сделаем получасовые когорты для постраения графиков.
 
-# In[428]:
+# In[17]:
 
 
 shops['hour'] = shops['time'].dt.round('30min')
 shops['day'] = shops['time'].dt.round(freq = 'D')
 
 
-# In[430]:
+# In[18]:
 
 
 shops.sample(20)
 
 
-# In[435]:
+# In[19]:
 
 
 shops.pivot_table(index='hour', columns='id', values = 'count', aggfunc = 'sum').plot(title='Распределение доходов платформ по годам').set(xlabel="Дата публикации", ylabel="Количество кликов")
