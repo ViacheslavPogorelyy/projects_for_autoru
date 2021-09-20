@@ -14,23 +14,23 @@ import time
 # In[2]:
 
 
-shop_1 = pd.read_excel('11124040_clicks.xlsx')
-shop_2 = pd.read_excel('2033339_clicks.xlsx')
-shop_3 = pd.read_excel('21313454_clicks.xlsx')
-shop_4 = pd.read_excel('3275769_clicks.xlsx')
-shop_5 = pd.read_excel('55553302_clicks.xlsx')
-shop_6 = pd.read_excel('8335728_clicks.xlsx')
+shop_1 = pd.read_excel('18602214_clicks.xlsx')
+shop_2 = pd.read_excel('19074357_clicks.xlsx')
+shop_3 = pd.read_excel('21223632_clicks.xlsx')
+shop_4 = pd.read_excel('38025008_clicks.xlsx')
+shop_5 = pd.read_excel('42078647_clicks.xlsx')
+shop_6 = pd.read_excel('57656624_clicks.xlsx')
 
 
 # In[3]:
 
 
-calls_1 = pd.read_excel('Calls_11124040.xlsx')
-calls_2 = pd.read_excel('Calls_2033339.xlsx')
-calls_3 = pd.read_excel('Calls_21313454.xlsx')
-calls_4 = pd.read_excel('Calls_3275769.xlsx')
-calls_5 = pd.read_excel('Calls_55553302.xlsx')
-calls_6 = pd.read_excel('Calls_8335728.xlsx')
+calls_1 = pd.read_excel('Calls_18602214.xlsx')
+calls_2 = pd.read_excel('Calls_19074357.xlsx')
+calls_3 = pd.read_excel('Calls_21223632.xlsx')
+calls_4 = pd.read_excel('Calls_38025008.xlsx')
+calls_5 = pd.read_excel('Calls_42078647.xlsx')
+calls_6 = pd.read_excel('Calls_57656624.xlsx')
 
 
 # In[4]:
@@ -152,7 +152,7 @@ calls
 # In[17]:
 
 
-shops['hour'] = shops['time'].dt.round('30min')
+shops['hour'] = shops['time'].dt.round('2H')
 shops['day'] = shops['time'].dt.round(freq = 'D')
 
 
@@ -162,10 +162,24 @@ shops['day'] = shops['time'].dt.round(freq = 'D')
 shops.sample(20)
 
 
+# Возьмем в качестве примера один из дней и построим график по нему.
+
 # In[19]:
 
 
-shops.pivot_table(index='hour', columns='id', values = 'count', aggfunc = 'sum').plot(title='Распределение доходов платформ по годам').set(xlabel="Дата публикации", ylabel="Количество кликов")
+day = shops.query('day == "2021-09-14"')
+
+
+# In[20]:
+
+
+day.pivot_table(index='hour', columns='id', values = 'count', aggfunc = 'sum').plot(title='Поведение рекламы в течение дня', figsize = (16,8)).set(xlabel="Время публикации", ylabel="Количество кликов")
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
