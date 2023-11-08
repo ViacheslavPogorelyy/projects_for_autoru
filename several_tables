@@ -11,3 +11,11 @@ def display_side_by_side(*args,titles=cycle([''])):
                                                   ' border-collapse:separate;"')
         html_str+='</td></th>'
     display_html(html_str,raw=True)
+
+
+display_side_by_side(
+    games[games['rating'].isna()]['genre'].value_counts(),
+    games[games['rating'].isna()]['year_of_release'].value_counts(),
+    games[games['rating'].isna()]['platform'].value_counts(),
+    titles=['Жанры', 'Год выпуска', 'Платформа']
+)
